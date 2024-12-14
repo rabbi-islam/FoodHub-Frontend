@@ -2,6 +2,12 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    //hilt
+    alias(libs.plugins.dagger.hilt)
+    alias(libs.plugins.ksp)
+
+    //serialization
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -58,4 +64,18 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     implementation(libs.core.splashscreen)
+
+    //Dagger-Hilt
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
+
+    //serialization
+    implementation(libs.kotlinx.serialization.json)
+
+    //retrofit
+    implementation (libs.retrofit)
+    implementation (libs.converter.gson)
+    implementation(libs.okhttp) // Use the latest version
+    implementation(libs.logging.interceptor) // For logging
 }
