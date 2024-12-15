@@ -78,4 +78,7 @@ dependencies {
     implementation (libs.converter.gson)
     implementation(libs.okhttp) // Use the latest version
     implementation(libs.logging.interceptor) // For logging
+
+    implementation ("androidx.lifecycle:lifecycle-runtime-compose:2.8.7")
+    implementation("androidx.navigation:navigation-compose:2.8.5")
 }
