@@ -8,4 +8,9 @@
     <string name="start_with_email_or_phone">Start with email or phone</string>
     <string name="facebook">FACEBOOK</string>
     <string name="google">GOOGLE</string>
+    <string name="sign_in_with">sign in with</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="password">Password</string>
+    <string name="email">E-Mail</string>
+    <string name="full_name">Full Name</string>
 </resources>

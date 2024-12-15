@@ -8,6 +8,7 @@ import android.view.animation.OvershootInterpolator
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -18,6 +19,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.animation.doOnEnd
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.example.foodhub.data.FoodApi
+import com.example.foodhub.ui.features.auth.AuthScreen
+import com.example.foodhub.ui.features.auth.signup.SignUpScreen
 import com.example.foodhub.ui.theme.FoodHubTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -70,10 +73,10 @@ class MainActivity : ComponentActivity() {
         setContent {
             FoodHubTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                    Box(modifier = Modifier.padding(innerPadding)){
+                        SignUpScreen()
+                    }
+
                 }
             }
         }
@@ -84,21 +87,5 @@ class MainActivity : ComponentActivity() {
             delay(3000)
             showSplashScreen = false
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    FoodHubTheme {
-        Greeting("Android")
     }
 }
