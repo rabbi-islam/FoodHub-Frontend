@@ -1,6 +1,5 @@
-package com.example.foodhub.ui.features.auth.signup
+package com.example.foodhub.ui.features.auth.signin
 
-import android.widget.Toast
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -31,33 +30,29 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.foodhub.R
 import com.example.foodhub.ui.FoodHubTextField
 import com.example.foodhub.ui.GroupSocialButtons
 import com.example.foodhub.ui.navigation.AuthScreen
 import com.example.foodhub.ui.navigation.Home
-import com.example.foodhub.ui.navigation.Login
+import com.example.foodhub.ui.navigation.SignUp
 import com.example.foodhub.ui.theme.orange
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
-fun SignUpScreen(navController: NavController, viewModel: SignUpViewModel = hiltViewModel()) {
+fun SignInScreen(navController: NavController, viewModel: SignInViewModel = hiltViewModel()) {
 
     Box(modifier = Modifier.fillMaxSize()) {
-        val name = viewModel.name.collectAsStateWithLifecycle()
         val email = viewModel.email.collectAsStateWithLifecycle()
         val password = viewModel.password.collectAsStateWithLifecycle()
         val errorMessage = remember { mutableStateOf<String?>(null) }
@@ -65,12 +60,12 @@ fun SignUpScreen(navController: NavController, viewModel: SignUpViewModel = hilt
 
         val uiState = viewModel.uiState.collectAsState()
         when (uiState.value) {
-            SignUpViewModel.SignUpEvent.Error -> {
+            SignInViewModel.SignInEvent.Error -> {
                 loading.value = false
                 errorMessage.value = "Failed"
             }
 
-            SignUpViewModel.SignUpEvent.Loading -> {
+            SignInViewModel.SignInEvent.Loading -> {
                 loading.value = true
                 errorMessage.value = null
             }
@@ -80,11 +75,10 @@ fun SignUpScreen(navController: NavController, viewModel: SignUpViewModel = hilt
                 errorMessage.value = null
             }
         }
-        val context = LocalContext.current
         LaunchedEffect(true) {
             viewModel.navigationEvent.collectLatest {event->
                 when(event) {
-                    SignUpViewModel.SignUpNavigationEvent.NavigateToHome -> {
+                    SignInViewModel.SignInNavigationEvent.NavigateToHome -> {
                         navController.navigate(Home){
                             popUpTo(AuthScreen){
                                 inclusive = true
@@ -92,8 +86,8 @@ fun SignUpScreen(navController: NavController, viewModel: SignUpViewModel = hilt
                         }
                     }
 
-                    SignUpViewModel.SignUpNavigationEvent.NavigateToLogin ->{
-                        navController.navigate(Login)
+                    SignInViewModel.SignInNavigationEvent.NavigateToSignUp ->{
+                        navController.navigate(SignUp)
                     }
                 }
             }
@@ -116,7 +110,7 @@ fun SignUpScreen(navController: NavController, viewModel: SignUpViewModel = hilt
 
 
             Text(
-                text = stringResource(R.string.sign_up),
+                text = stringResource(R.string.sign_in),
                 fontWeight = FontWeight.Bold,
                 fontSize = 32.sp,
                 modifier = Modifier
@@ -124,21 +118,6 @@ fun SignUpScreen(navController: NavController, viewModel: SignUpViewModel = hilt
                     .padding(16.dp)
             )
             Spacer(Modifier.size(20.dp))
-            FoodHubTextField(
-                value = name.value,
-                onValueChange = { viewModel.onNameChange(it) },
-                label = {
-                    Text(
-                        text = stringResource(R.string.full_name),
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                        color = Color.Gray
-                    )
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-            )
-
             FoodHubTextField(
                 value = email.value,
                 onValueChange = { viewModel.onEmailChange(it) },
@@ -181,7 +160,7 @@ fun SignUpScreen(navController: NavController, viewModel: SignUpViewModel = hilt
             Spacer(Modifier.size(16.dp))
             Text(text = errorMessage.value?: "", color = Color.Red)
             Button(
-                onClick = viewModel::onSignUpClick,
+                onClick = viewModel::onSignInClick,
                 modifier = Modifier.height(48.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = orange)
             ) {
@@ -204,7 +183,7 @@ fun SignUpScreen(navController: NavController, viewModel: SignUpViewModel = hilt
                             )
                         } else {
                             Text(
-                                text = stringResource(R.string.sign_up),
+                                text = stringResource(R.string.sign_in),
                                 modifier = Modifier.padding(horizontal = 32.dp)
                             )
                         }
@@ -215,11 +194,11 @@ fun SignUpScreen(navController: NavController, viewModel: SignUpViewModel = hilt
             }
             Spacer(Modifier.size(16.dp))
             Text(
-                text = stringResource(R.string.already_have_an_account_signin),
+                text = stringResource(R.string.dont_have_an_account_signup),
                 modifier = Modifier
                     .padding(8.dp)
                     .clickable {
-                        viewModel.onLoginClicked()
+                        viewModel.onSignUpClicked()
                     }
                     .fillMaxWidth(),
                 textAlign = TextAlign.Center
@@ -231,8 +210,3 @@ fun SignUpScreen(navController: NavController, viewModel: SignUpViewModel = hilt
 
 }
 
-@Preview(showBackground = true)
-@Composable
-private fun PrevSignUp() {
-    SignUpScreen(rememberNavController())
-}
